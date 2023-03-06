@@ -42,10 +42,5 @@ scrape_configs:
   - job_name: 'nodejs'
     static_configs:
       - targets: ['nodejs:5000']
-
-  - job_name: "loki"
-    static_configs:
-      - targets: ['loki:3100'] 
-
-    # Override the global default and scrape targets from this job every 5 seconds.
+      # Override the global default and scrape targets from this job every 5 seconds.
     # scrape_interval: 5s
