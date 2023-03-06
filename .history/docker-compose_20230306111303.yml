@@ -121,5 +121,4 @@ services:
     command:
       - -config.file=/etc/promtail/promtail.yaml
     depends_on:
-      - loki
-          
+      - loki    

@@ -107,19 +107,4 @@ services:
     volumes:
       - loki_data:/loki
 
-  promtail:
-    image: grafana/promtail:2.4.1
-    container_name: promtail
-    ports:
-      - 9080:9080
-    networks:
-      - loki
-      - monitor
-    volumes:
-      - /var/log:/var/log
-      - /var/lib/docker/containers:/var/lib/docker/containers
-    command:
-      - -config.file=/etc/promtail/promtail.yaml
-    depends_on:
-      - loki
-          
+  promtail:    
