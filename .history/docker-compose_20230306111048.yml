@@ -106,4 +106,3 @@ services:
       - loki
     volumes:
       - loki_data:/loki
-      
