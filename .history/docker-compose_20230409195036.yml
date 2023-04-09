@@ -1,16 +1,20 @@
 version: '3.2'
 
+# Define named volumes for persistent data storage
 volumes:
   prometheus_data: {}
   grafana_data: {}
   mysql_exporter_data: {}
   loki_data: {}
 
+# Define networks for container communication
 networks:
   monitor:
   loki:
 
+# Define services (containers) and their configurations
 services:
+  # Prometheus service for metrics collection and storage
   prometheus:
     image: prom/prometheus:v2.39.0
     ports:
@@ -26,6 +30,7 @@ services:
     depends_on:
       - node-exporter
 
+  # Node Exporter service for collecting system metrics
   node-exporter:
     image: prom/node-exporter:v1.4.0
     ports:
@@ -42,6 +47,7 @@ services:
       - "--collector.textfile.directory=/etc/node-exporter/"
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
 
+  # Grafana service for visualization and dashboarding
   grafana:
     image: grafana/grafana
     ports:
@@ -54,7 +60,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
 
-
+  # cAdvisor service for collecting container metrics
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
@@ -63,7 +69,7 @@ services:
     networks:
       - monitor
 
-
+  # MySQL service for database storage
   mysql:
     image: mysql:5.7
     ports:
@@ -74,6 +80,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=demodb
 
+  # MySQL Exporter service for collecting MySQL database metrics
   mysql-exporter:
     image: prom/mysqld-exporter
     ports:
@@ -87,6 +94,7 @@ services:
     volumes:
       - mysql_exporter_data:/etc/node-exporter/
 
+  # Node.js backend service for demo application
   nodejs:
     image: christianheimke/demo-backend-nodejs:001
     container_name: nodejs
@@ -97,6 +105,7 @@ services:
     networks:
       - monitor
 
+  # Loki service for collecting and storing logs
   loki:
     image: grafana/loki:2.4.1
     container_name: loki
@@ -106,5 +115,7 @@ services:
       - loki
     volumes:
       - loki_data:/loki
-  
-      
+
+  # Promtail service for collecting logs and sending to Loki
+  promtail:
+    image: grafana/promtail
